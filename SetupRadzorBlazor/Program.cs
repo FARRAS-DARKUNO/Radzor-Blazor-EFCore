@@ -1,5 +1,7 @@
+using Microsoft.EntityFrameworkCore;
 using Radzen;
 using SetupRadzorBlazor.Components;
+using SetupRadzorBlazor.Domain;
 using SetupRadzorBlazor.Infrastructure;
 using SetupRadzorBlazor.Services;
 
@@ -13,6 +15,11 @@ builder.Services.AddRadzenComponents();
 
 builder.Services.AddScoped<ICarRepository, CarRepository>();
 builder.Services.AddScoped<ICarService, CarService>();
+
+builder.Services.AddDbContext<CarDbContext>(option =>
+{
+    option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
 
 var app = builder.Build();
 

@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using SetupRadzorBlazor.Domain
 
 @inject ICarService CarService
 @rendermode InteractiveServer
@@ -7,26 +8,32 @@
 
 <div class="container p-xl-5 p-lg-4 p-md-3 p-sm-3">
     <div class="card shadow">
-        <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.Advanced" 
-        AllowSorting="true" PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true" Data="@cars"
-        ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or">
-            <Columns>
-                <RadzenDataGridColumn TItem="Car" Property="@nameof(Car.Make)" Title="Make" Filterable="true"  />
-                <RadzenDataGridColumn TItem="Car" Property="@nameof(Car.Model)" Title="Model" Filterable="true" />
-                <RadzenDataGridColumn TItem="Car" Property="@nameof(Car.Year)" Title="Year" Filterable="true" />
-                <RadzenDataGridColumn TItem="Car" Property="@nameof(Car.Price)" Title="Price" Filterable="true" />
-                <RadzenDataGridColumn TItem="Car" Property="@nameof(Car.Engine)" Title="Engine" Filterable="true" />
-                <RadzenDataGridColumn TItem="Car" Property="@nameof(Car.Color)" Title="Color" Filterable="true" />
-            </Columns>
-        </RadzenDataGrid>
+
+        @if(cars is null){
+            <h1 class="alert alert-danger"> No Car Not Found</h1>
+        }else{
+            <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.Advanced"
+                            AllowSorting="true" PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true" Data="@cars"
+                            ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or">
+                <Columns>
+                    <RadzenDataGridColumn TItem="CarEntity" Property="@nameof(CarEntity.Id)" Title="Id" Filterable="true" />
+                    <RadzenDataGridColumn TItem="CarEntity" Property="@nameof(CarEntity.Make)" Title="Make" Filterable="true" />
+                    <RadzenDataGridColumn TItem="CarEntity" Property="@nameof(CarEntity.Model)" Title="Model" Filterable="true" />
+                    <RadzenDataGridColumn TItem="CarEntity" Property="@nameof(CarEntity.Year)" Title="Year" Filterable="true" />
+                    <RadzenDataGridColumn TItem="CarEntity" Property="@nameof(CarEntity.Price)" Title="Price" Filterable="true" />
+                    <RadzenDataGridColumn TItem="CarEntity" Property="@nameof(CarEntity.Engine)" Title="Engine" Filterable="true" />
+                    <RadzenDataGridColumn TItem="CarEntity" Property="@nameof(CarEntity.Color)" Title="Color" Filterable="true" />
+                </Columns>
+            </RadzenDataGrid>
+        }        
     </div>
 </div>
 
 @code {
-    IEnumerable<Car> cars;
+    IEnumerable<CarEntity?> cars;
 
     protected override async Task OnInitializedAsync()
     {
-        cars = CarService.GerCar();
+        cars = await CarService.GetAllCars();
     }
 }

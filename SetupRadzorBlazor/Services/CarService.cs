@@ -1,4 +1,5 @@
-﻿using SetupRadzorBlazor.Infrastructure;
+﻿using SetupRadzorBlazor.Domain;
+using SetupRadzorBlazor.Infrastructure;
 using SetupRadzorBlazor.Models;
 
 namespace SetupRadzorBlazor.Services
@@ -10,7 +11,12 @@ namespace SetupRadzorBlazor.Services
         public CarService(ICarRepository carRepository)
         {
 
-            _carRepository = new CarRepository();
+            _carRepository = carRepository;
+        }
+
+        public async Task<IEnumerable<CarEntity>> GetAllCars()
+        {
+            return await _carRepository.GetAllAsync();
         }
 
         public IEnumerable<Car> GerCar()

@@ -1,9 +1,50 @@
-﻿using SetupRadzorBlazor.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using SetupRadzorBlazor.Domain;
+using SetupRadzorBlazor.Models;
 
 namespace SetupRadzorBlazor.Infrastructure
 {
     public class CarRepository : ICarRepository
     {
+        private readonly CarDbContext _context;
+
+        public CarRepository(CarDbContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<IEnumerable<CarEntity>> GetAllAsync()
+        {
+            return await _context.CarInventory.ToListAsync();
+        }
+
+        public async Task<CarEntity?> GetByIdAsync(int id)
+        {
+            return await _context.CarInventory.FindAsync(id);
+        }
+
+        public async Task AddAsync(CarEntity car)
+        {
+            await _context.CarInventory.AddAsync(car);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(CarEntity car)
+        {
+             _context.CarInventory.Update(car);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            var car = await _context.CarInventory.FindAsync(id);
+            if (car != null)
+            {
+                _context.CarInventory.Remove(car);
+                await _context.SaveChangesAsync();
+            }
+
+        }
 
         public IEnumerable<Car> GetCars()
         {
