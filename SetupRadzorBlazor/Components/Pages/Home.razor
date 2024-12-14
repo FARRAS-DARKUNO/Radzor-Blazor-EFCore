@@ -1,0 +1,32 @@
+﻿@page "/"
+
+@inject ICarService CarService
+@rendermode InteractiveServer
+
+<PageTitle>Home</PageTitle>
+
+<div class="container p-xl-5 p-lg-4 p-md-3 p-sm-3">
+    <div class="card shadow">
+        <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.Advanced" 
+        AllowSorting="true" PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true" Data="@cars"
+        ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or">
+            <Columns>
+                <RadzenDataGridColumn TItem="Car" Property="@nameof(Car.Make)" Title="Make" Filterable="true"  />
+                <RadzenDataGridColumn TItem="Car" Property="@nameof(Car.Model)" Title="Model" Filterable="true" />
+                <RadzenDataGridColumn TItem="Car" Property="@nameof(Car.Year)" Title="Year" Filterable="true" />
+                <RadzenDataGridColumn TItem="Car" Property="@nameof(Car.Price)" Title="Price" Filterable="true" />
+                <RadzenDataGridColumn TItem="Car" Property="@nameof(Car.Engine)" Title="Engine" Filterable="true" />
+                <RadzenDataGridColumn TItem="Car" Property="@nameof(Car.Color)" Title="Color" Filterable="true" />
+            </Columns>
+        </RadzenDataGrid>
+    </div>
+</div>
+
+@code {
+    IEnumerable<Car> cars;
+
+    protected override async Task OnInitializedAsync()
+    {
+        cars = CarService.GerCar();
+    }
+}
