@@ -15,7 +15,7 @@ builder.Services.AddRadzenComponents();
 
 builder.Services.AddScoped<ICarRepository, CarRepository>();
 builder.Services.AddScoped<ICarService, CarService>();
-
+builder.Services.AddScoped<DialogService>();
 builder.Services.AddDbContext<CarDbContext>(option =>
 {
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));

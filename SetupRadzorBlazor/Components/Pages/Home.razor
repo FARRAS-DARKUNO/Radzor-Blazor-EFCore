@@ -3,6 +3,7 @@
 
 @inject ICarService CarService
 @rendermode InteractiveServer
+@inject DialogService DialogService
 
 <PageTitle>Home</PageTitle>
 
@@ -12,9 +13,9 @@
         @if(cars is null){
             <h1 class="alert alert-danger"> No Car Not Found</h1>
         }else{
-            <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.Advanced"
-                            AllowSorting="true" PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true" Data="@cars"
-                            ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or">
+            <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false"
+            AllowSorting="true" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true" Data="@cars"
+            LogicalFilterOperator="LogicalFilterOperator.Or" TItem="CarEntity" SelectionMode="DataGridSelectionMode.Single">
                 <Columns>
                     <RadzenDataGridColumn TItem="CarEntity" Property="@nameof(CarEntity.Id)" Title="Id" Filterable="true" />
                     <RadzenDataGridColumn TItem="CarEntity" Property="@nameof(CarEntity.Make)" Title="Make" Filterable="true" />
@@ -23,6 +24,11 @@
                     <RadzenDataGridColumn TItem="CarEntity" Property="@nameof(CarEntity.Price)" Title="Price" Filterable="true" />
                     <RadzenDataGridColumn TItem="CarEntity" Property="@nameof(CarEntity.Engine)" Title="Engine" Filterable="true" />
                     <RadzenDataGridColumn TItem="CarEntity" Property="@nameof(CarEntity.Color)" Title="Color" Filterable="true" />
+                    <RadzenDataGridColumn TItem="CarEntity" Title="Action">
+                        <Template Context="data">
+                            <RadzenButton Click="@(args => EditCar(data))">Edit</RadzenButton>
+                        </Template>
+                    </RadzenDataGridColumn>     
                 </Columns>
             </RadzenDataGrid>
         }        
@@ -30,10 +36,26 @@
 </div>
 
 @code {
-    IEnumerable<CarEntity?> cars;
+    IEnumerable<CarEntity>? cars;
 
     protected override async Task OnInitializedAsync()
     {
         cars = await CarService.GetAllCars();
+    }
+
+    private async Task EditCar(CarEntity selectedCar)
+    {
+        var parameters = new Dictionary<string, object>()
+    {
+        { "car", selectedCar }
+    };
+
+        var options = new Radzen.DialogOptions()
+            {
+                Width = "700px",
+                Height = "530px"
+            };
+
+        await DialogService.OpenAsync<EditCarDialog>("Edit Car", parameters, options);
     }
 }

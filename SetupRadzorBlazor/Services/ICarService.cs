@@ -7,5 +7,6 @@ namespace SetupRadzorBlazor.Services
     {
         IEnumerable<Car> GerCar();
         Task<IEnumerable<CarEntity>> GetAllCars();
+        Task UpdateCarService(CarEntity car);
     }
 }

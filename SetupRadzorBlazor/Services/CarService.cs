@@ -2,6 +2,7 @@
 using SetupRadzorBlazor.Infrastructure;
 using SetupRadzorBlazor.Models;
 
+
 namespace SetupRadzorBlazor.Services
 {
     public class CarService : ICarService
@@ -17,6 +18,11 @@ namespace SetupRadzorBlazor.Services
         public async Task<IEnumerable<CarEntity>> GetAllCars()
         {
             return await _carRepository.GetAllAsync();
+        }
+
+        public async Task UpdateCarService(CarEntity car)
+        {
+            await _carRepository.UpdateAsync(car);
         }
 
         public IEnumerable<Car> GerCar()
