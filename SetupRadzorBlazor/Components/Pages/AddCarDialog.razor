@@ -5,16 +5,16 @@
 @inject DialogService DialogService
 
 
-<CarDialog car="car" CloaseDialog="CloaseDialog" SaveCar="SaveCar"/>
+<CarDialog car="car" CloaseDialog="CloaseDialog" SaveCar="SaveCar" />
 
 @code {
-    [Parameter] public CarEntity? car { get; set; }
+    public CarEntity car { get; set; } = new CarEntity();
 
     private async Task SaveCar()
     {
         if (car is not null)
         {
-            await CarService.UpdateCarService(car);
+            await CarService.CreateCarAsync(car);
             DialogService.Close();
 
         }

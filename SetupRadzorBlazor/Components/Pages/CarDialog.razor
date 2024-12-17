@@ -1,0 +1,45 @@
+﻿@* @page "/editCar" *@
+
+@using SetupRadzorBlazor.Domain
+@inject ICarService CarService
+
+
+<EditForm Model="@CarService" OnValidSubmit="SaveCar">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div>
+        <label for="make">Make:</label>
+        <InputText id="Make" @bind-Value="car.Make" />
+    </div>
+
+    <div>
+        <label for="make">Model:</label>
+        <InputText id="Make" @bind-Value="car.Model" />
+    </div>
+
+    <div>
+        <label for="make">Engine:</label>
+        <InputText id="Make" @bind-Value="car.Engine" />
+    </div>
+
+    <div>
+        <label for="make">Color:</label>
+        <InputText id="Make" @bind-Value="car.Color" />
+    </div>
+
+    <div>
+        <label for="make">price:</label>
+        <InputNumber id="Make" @bind-Value="car.Price" />
+    </div>
+
+    <RadzenButton ButtonType="ButtonType.Submit" Icon="save">Save</RadzenButton>
+    <RadzenButton ButtonType="ButtonType.Button" Icon="close" Click="CloaseDialog">Cancle</RadzenButton>
+
+</EditForm>
+
+@code {
+    [Parameter] public CarEntity? car { get; set; }
+    [Parameter] public EventCallback SaveCar { get; set; }
+    [Parameter] public EventCallback CloaseDialog { get; set; }
+}

@@ -9,6 +9,7 @@
 
 <div class="container p-xl-5 p-lg-4 p-md-3 p-sm-3">
     <div class="card shadow">
+        <RadzenButton Click="AddCar">Add</RadzenButton>
 
         @if(cars is null){
             <h1 class="alert alert-danger"> No Car Not Found</h1>
@@ -27,6 +28,7 @@
                     <RadzenDataGridColumn TItem="CarEntity" Title="Action">
                         <Template Context="data">
                             <RadzenButton Click="@(args => EditCar(data))">Edit</RadzenButton>
+                            <RadzenButton Click="@(args => DeleteCar(data.Id))">Delete</RadzenButton>
                         </Template>
                     </RadzenDataGridColumn>     
                 </Columns>
@@ -57,5 +59,32 @@
             };
 
         await DialogService.OpenAsync<EditCarDialog>("Edit Car", parameters, options);
+    }
+
+    private async Task RefreshCar(){
+        cars = await CarService.GetAllCars();
+        StateHasChanged();
+    }
+
+    private async Task DeleteCar(int id){
+        bool? confirmDelete = await DialogService.Confirm("Are you sure to delete ? ", "Delete car");
+        if (confirmDelete is not null && confirmDelete == true){
+            await CarService.DeleteCarAsync(id);
+            await RefreshCar();
+        }
+    }
+
+    private async void AddCar()
+    {
+
+            var options = new Radzen.DialogOptions()
+                {
+                    Width = "700px",
+                    Height = "530px"
+                };
+
+            var result = await DialogService.OpenAsync<AddCarDialog>("Add Car", null, options);
+
+            await RefreshCar();
     }
 }

@@ -25,6 +25,16 @@ namespace SetupRadzorBlazor.Services
             await _carRepository.UpdateAsync(car);
         }
 
+        public async Task DeleteCarAsync(int id)
+        {
+            await _carRepository.DeleteAsync(id);
+        }
+
+        public async Task CreateCarAsync(CarEntity car)
+        {
+            await _carRepository.AddAsync(car);
+        }
+
         public IEnumerable<Car> GerCar()
         {
             return _carRepository.GetCars();
